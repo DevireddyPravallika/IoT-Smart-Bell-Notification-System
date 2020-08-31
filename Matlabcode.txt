@@ -1,0 +1,58 @@
+close all;
+clear;
+clc;
+com=serial('COM3','BaudRate',9600);                                             %creating objective for serial communication
+disp('Initializing COM port');                          
+%fopen(com);
+disp('Initializing webcam');
+vid=videoinput('winvideo',1,'YUY2_640x480');  %2 send cam                                  %creating objective for camera
+set(vid,'Returnedcolorspace','RGB');                                            %selecting rgb mode in camera
+count=0;
+while 1==1  
+    fopen(com);                                                                 %opening serial com port
+    rec=fscanf(com);                                                            %scaning com port for 10 sec
+    fclose(com);                                                                %closing com port
+    a=size(rec);                                                                %checking for data receive or not
+    if a>0
+        close all
+        count=count+1;                                                          %no of peron count
+        image=getsnapshot(vid);                                                 %capturing an image from camera
+%        face=vision.CascadeObjectDetector;                                      %creating objective for face recognition tool
+%        box=step(face,image);                                                   %analing image for face recognition
+%        imshow(image);
+        %title('SNAP SHOT FROM WEBCAM');
+        %image=insertText(image, [0 0], num2str(round(clock)));                  %inserting time and date in the image
+%        siz=size(box);                                                          %verifing for face in the image
+%        if siz>0                                                                %and sending the data
+%            IFaces = insertObjectAnnotation(image, 'rectangle', box, 'Face');   %to the controller
+%            imshow(IFaces), title('Detected faces');                            %
+%            fopen(com);                                                         %
+%            fprintf(com,'*detect#');                                            %
+%            fclose(com);                                                        %
+%        else
+%            imshow(image), title('NO FACE DETECTED');                           %
+%            fopen(com);                                                         %Sending no person status to 
+%            fprintf(com,'*notdtect#');                                          %controller board
+%            fclose(com);                                                        %
+%        end
+%        while 1==1                                                              %
+%            fopen(com);                                                         %
+%            dat=fscanf(com);                                                    %Waiting for perons
+%            fclose(com);                                                        %leaving time to
+%            if dat>0                                                            %write end time in
+%                image=insertText(image,[450 0], num2str(round(clock)));         %image
+%                imshow(image);                                                  %
+%                break
+%            end
+%        end
+%     imshow(image);                                                              %displaying image
+   % mkdir('D:',date);                                                                 %creating the folder with the name of date
+    nm=strcat('C:\Users\Admin\Google Drive\Face capture',date,'pic',num2str(count),'.jpg');                    %writing the name of the image with veriable count
+ %   imwrite(image,'praveen.jpg');
+                                                               %saving the image in the directry
+    imwrite(image,nm); % creating folder ....
+   imwrite(image,'ksn.jpg');
+    test=ftp('maximus.freewha.com','switchit.orgfree.com','hostanil');
+    mput(test,'ksn.jpg');  %'ksn.jpg'
+    end
+end
